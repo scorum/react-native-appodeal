@@ -125,7 +125,7 @@ module.exports = {
   muteVideosIfCallsMuted: (value) => RNAppodeal.muteVideosIfCallsMuted(appKey, adTypes),
   showTestScreen: () => RNAppodeal.showTestScreen(),
   getVersion: (cb = () => {}) => RNAppodeal.getVersion(cb),
-  canShow: (adTypes, placement) => RNAppodeal.initialize(appKey, adTypes),
+  canShow: (adTypes, placement, cb = () => {}) => RNAppodeal.canShow(adTypes, placement, cb),
   setCustomStringRule: (name, value) => RNAppodeal.setCustomStringRule(name, value),
   setCustomBooleanRule: (name, value) => RNAppodeal.setCustomBooleanRule(name, value),
   setCustomIntegerRule: (name, value) => RNAppodeal.setCustomIntegerRule(name, value),
