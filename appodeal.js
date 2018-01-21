@@ -3,6 +3,7 @@
 import {
   NativeModules,
   NativeEventEmitter,
+  Platform,
 } from 'react-native';
 
 const RNAppodeal = NativeModules.RNAppodeal;
@@ -89,6 +90,11 @@ const removeAllListeners = () => {
   });
 };
 
+const canShow = Platform.select({
+  ios: (adTypes, placement, cb = () => {}) => RNAppodeal.canShow(adTypes, placement, cb),
+  android: (adType, placement, cb = () => {}) => RNAppodeal.canShow({adType , placement}, cb),
+});
+
 module.exports = {
   ...RNAppodeal,
   INTERSTITIAL,
@@ -125,7 +131,7 @@ module.exports = {
   muteVideosIfCallsMuted: (value) => RNAppodeal.muteVideosIfCallsMuted(appKey, adTypes),
   showTestScreen: () => RNAppodeal.showTestScreen(),
   getVersion: (cb = () => {}) => RNAppodeal.getVersion(cb),
-  canShow: (adTypes, placement, cb = () => {}) => RNAppodeal.canShow(adTypes, placement, cb),
+  canShow,
   setCustomStringRule: (name, value) => RNAppodeal.setCustomStringRule(name, value),
   setCustomBooleanRule: (name, value) => RNAppodeal.setCustomBooleanRule(name, value),
   setCustomIntegerRule: (name, value) => RNAppodeal.setCustomIntegerRule(name, value),
