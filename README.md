@@ -63,6 +63,15 @@ maven {
 ```
 
 + Enable multiDex in your application. Follow [this](https://developer.android.com/studio/build/multidex.html) documentation to enable it.
+  It may requires to add this to `android/app/build.gradle`:
+  ```gradle
+  android {
+    ...
+    dexOptions {
+      javaMaxHeapSize "2g"
+    }
+  }
+  ```
 
 ## Usage
 ```javascript
