@@ -49,9 +49,9 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void initialize(String appKey, int adTypes) {
+	public void initialize(String appKey, int adTypes, boolean hasConsent) {
 		Appodeal.setFramework("react-native", "2.1.4");
-		Appodeal.initialize(getCurrentActivity(), appKey, adTypes);
+		Appodeal.initialize(getCurrentActivity(), appKey, adTypes, hasConsent);
 	}
 
 	@ReactMethod
@@ -187,9 +187,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void canShow(ReadableMap args, Callback callback){
-		int adType = args.getInt("adType");
-		String placement = args.hasKey("placement") ? args.getString("placement") : null;
+	public void canShow(int adType, String placement, Callback callback){
 		boolean result;
 		if (placement == null) {
 			result = Appodeal.canShow(adType);
