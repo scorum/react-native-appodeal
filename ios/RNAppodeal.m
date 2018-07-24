@@ -115,11 +115,11 @@ RCT_EXPORT_MODULE();
 
 #pragma mark exported methods
 
-RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType) {
+RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType hasConsent:(BOOL)consent) {
     dispatch_async(dispatch_get_main_queue(), ^{
         customRules = [[NSMutableDictionary alloc] init];
         [Appodeal setFramework:APDFrameworkReactNative];
-        [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType)];
+        [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType) hasConsent:consent];
         
         [Appodeal setRewardedVideoDelegate:self];
         [Appodeal setNonSkippableVideoDelegate:self];
@@ -338,7 +338,7 @@ RCT_EXPORT_METHOD(setCustomDoubleRule:(NSString *)ruleName value:(double)ruleVal
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithDouble:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -348,7 +348,7 @@ RCT_EXPORT_METHOD(setCustomIntegerRule:(NSString *)ruleName value:(int)ruleValue
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithInteger:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -358,7 +358,7 @@ RCT_EXPORT_METHOD(setCustomStringRule:(NSString *)ruleName value:(NSString *)rul
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : ruleValue};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -368,7 +368,7 @@ RCT_EXPORT_METHOD(setCustomBooleanRule:(NSString *)ruleName value:(BOOL)ruleValu
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithBool:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
