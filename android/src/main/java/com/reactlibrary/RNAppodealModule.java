@@ -144,9 +144,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void disableNetwork(ReadableMap args){
-		String networkName = args.getString("network");
-		int adTypes = args.hasKey("adType") ? args.getInt("adType") : -1;
+	public void disableNetwork(String networkName, int adTypes){
 		if(adTypes == -1) {
 			Appodeal.disableNetwork(getCurrentActivity(), networkName);
 		} else {

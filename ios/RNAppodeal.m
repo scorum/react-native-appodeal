@@ -242,7 +242,19 @@ RCT_EXPORT_METHOD(setChildDirectedTreatment:(BOOL)enabled) {
 
 RCT_EXPORT_METHOD(setOnLoadedTriggerBoth:(int)adType enabled:(BOOL)val) { }
 
-RCT_EXPORT_METHOD(disableNetwork:(NSString *)name) {
+RCT_EXPORT_METHOD(disableNetwork:(NSString *)name types:(int)adType) {
+    if(adType > -1){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ((adType & BANNER) > 0 ||
+                (adType & BANNER_TOP) > 0 ||
+                (adType & BANNER_BOTTOM) > 0) {
+                [Appodeal disableNetworkForAdType:AppodealAdTypeBanner name:name];
+            }
+            [Appodeal disableNetworkForAdType:nativeAdTypesForType(adType) name:name];
+        });
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [Appodeal disableNetworkForAdType:AppodealAdTypeMREC name:name];
         [Appodeal disableNetworkForAdType:AppodealAdTypeBanner name:name];
