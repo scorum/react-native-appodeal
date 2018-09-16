@@ -49,9 +49,9 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void initialize(String appKey, int adTypes) {
-		Appodeal.setFramework("react-native", "2.1.4");
-		Appodeal.initialize(getCurrentActivity(), appKey, adTypes);
+	public void initialize(String appKey, int adTypes, boolean hasConsent) {
+		Appodeal.setFramework("react-native", "2.4.5");
+		Appodeal.initialize(getCurrentActivity(), appKey, adTypes, hasConsent);
 	}
 
 	@ReactMethod
@@ -144,9 +144,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void disableNetwork(ReadableMap args){
-		String networkName = args.getString("network");
-		int adTypes = args.hasKey("adType") ? args.getInt("adType") : -1;
+	public void disableNetwork(String networkName, int adTypes){
 		if(adTypes == -1) {
 			Appodeal.disableNetwork(getCurrentActivity(), networkName);
 		} else {
@@ -187,9 +185,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@ReactMethod
-	public void canShow(ReadableMap args, Callback callback){
-		int adType = args.getInt("adType");
-		String placement = args.hasKey("placement") ? args.getString("placement") : null;
+	public void canShow(int adType, String placement, Callback callback){
 		boolean result;
 		if (placement == null) {
 			result = Appodeal.canShow(adType);
@@ -203,22 +199,22 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	@ReactMethod
 	public void setCustomStringRule(String name, String value){
-		Appodeal.setCustomRule(name, value);
+//		Appodeal.setCustomRule(name, value);
 	}
 
 	@ReactMethod
 	public void setCustomBooleanRule(String name, boolean value){
-		Appodeal.setCustomRule(name, value);
+//		Appodeal.setCustomRule(name, value);
 	}
 
 	@ReactMethod
 	public void setCustomIntegerRule(String name, int value){
-		Appodeal.setCustomRule(name, value);
+//		Appodeal.setCustomRule(name, value);
 	}
 
 	@ReactMethod
 	public void setCustomDoubleRule(String name, double value){
-		Appodeal.setCustomRule(name, value);
+//		Appodeal.setCustomRule(name, value);
 	}
 
 	@ReactMethod
@@ -231,10 +227,10 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 		String placement = args.hasKey("placement") ? args.getString("placement") : null;
 		WritableMap params = Arguments.createMap();
 		if (placement == null) {
-			params.putInt("amount", Appodeal.getRewardParameters().first);
+			params.putDouble("amount", Appodeal.getRewardParameters().first);
 			params.putString("currency", Appodeal.getRewardParameters().second);
 		} else {
-			params.putInt("amount", Appodeal.getRewardParameters(placement).first);
+			params.putDouble("amount", Appodeal.getRewardParameters(placement).first);
 			params.putString("currency", Appodeal.getRewardParameters(placement).second);
 		}
 
@@ -302,6 +298,11 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
+	public void onInterstitialExpired() {
+		sendEventToJS("onInterstitialExpired", null);
+	}
+
+	@Override
 	public void onBannerClicked() {
 		sendEventToJS("onBannerClicked", null);
 	}
@@ -325,6 +326,11 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
+	public void onBannerExpired() {
+		sendEventToJS("onBannerExpired", null);
+	}
+
+	@Override
 	public void onNonSkippableVideoClosed(boolean isFinished) {
 		WritableMap params = Arguments.createMap();
 		params.putBoolean("isFinished", isFinished);
@@ -342,13 +348,18 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
-	public void onNonSkippableVideoLoaded() {
+	public void onNonSkippableVideoLoaded(boolean isFinished) {
 		sendEventToJS("onNonSkippableVideoLoaded", null);
 	}
 
 	@Override
 	public void onNonSkippableVideoShown() {
 		sendEventToJS("onNonSkippableVideoShown", null);
+	}
+
+	@Override
+	public void onNonSkippableVideoExpired() {
+		sendEventToJS("onNonSkippableVideoExpired", null);
 	}
 
 	@Override
@@ -364,21 +375,26 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
-	public void onRewardedVideoFinished(int amount, String currency) {
+	public void onRewardedVideoFinished(double amount, String currency) {
 		WritableMap params = Arguments.createMap();
-		params.putInt("amount", amount);
+		params.putDouble("amount", amount);
 		params.putString("currency", currency);
 		sendEventToJS("onRewardedVideoFinished", params);
 	}
 
 	@Override
-	public void onRewardedVideoLoaded() {
+	public void onRewardedVideoLoaded(boolean isFinished) {
 		sendEventToJS("onRewardedVideoLoaded", null);
 	}
 
 	@Override
 	public void onRewardedVideoShown() {
 		sendEventToJS("onRewardedVideoShown", null);
+	}
+
+	@Override
+	public void onRewardedVideoExpired() {
+		sendEventToJS("onRewardedVideoExpired", null);
 	}
 
 	@Override

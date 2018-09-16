@@ -115,11 +115,11 @@ RCT_EXPORT_MODULE();
 
 #pragma mark exported methods
 
-RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType) {
+RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType hasConsent:(BOOL)consent) {
     dispatch_async(dispatch_get_main_queue(), ^{
         customRules = [[NSMutableDictionary alloc] init];
         [Appodeal setFramework:APDFrameworkReactNative];
-        [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType)];
+        [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType) hasConsent:consent];
         
         [Appodeal setRewardedVideoDelegate:self];
         [Appodeal setNonSkippableVideoDelegate:self];
@@ -242,7 +242,19 @@ RCT_EXPORT_METHOD(setChildDirectedTreatment:(BOOL)enabled) {
 
 RCT_EXPORT_METHOD(setOnLoadedTriggerBoth:(int)adType enabled:(BOOL)val) { }
 
-RCT_EXPORT_METHOD(disableNetwork:(NSString *)name) {
+RCT_EXPORT_METHOD(disableNetwork:(NSString *)name types:(int)adType) {
+    if(adType > -1){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ((adType & BANNER) > 0 ||
+                (adType & BANNER_TOP) > 0 ||
+                (adType & BANNER_BOTTOM) > 0) {
+                [Appodeal disableNetworkForAdType:AppodealAdTypeBanner name:name];
+            }
+            [Appodeal disableNetworkForAdType:nativeAdTypesForType(adType) name:name];
+        });
+        return;
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [Appodeal disableNetworkForAdType:AppodealAdTypeMREC name:name];
         [Appodeal disableNetworkForAdType:AppodealAdTypeBanner name:name];
@@ -338,7 +350,7 @@ RCT_EXPORT_METHOD(setCustomDoubleRule:(NSString *)ruleName value:(double)ruleVal
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithDouble:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -348,7 +360,7 @@ RCT_EXPORT_METHOD(setCustomIntegerRule:(NSString *)ruleName value:(int)ruleValue
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithInteger:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -358,7 +370,7 @@ RCT_EXPORT_METHOD(setCustomStringRule:(NSString *)ruleName value:(NSString *)rul
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : ruleValue};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -368,7 +380,7 @@ RCT_EXPORT_METHOD(setCustomBooleanRule:(NSString *)ruleName value:(BOOL)ruleValu
         if (customRules) {
             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithBool:ruleValue]};
             [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
+//            [Appodeal setCustomRule:customRules];
         }
     });
 }
@@ -479,7 +491,7 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
 }
 
 - (void)rewardedVideoWillDismiss {
-    [self sendEventWithName:kEventRewardedVideoClosed body:nil];
+    [self sendEventWithName:kEventRewardedVideoClosed body:@{}];
 }
 
 - (void)rewardedVideoDidFinish:(NSUInteger)rewardAmount name:(NSString *)rewardName {

@@ -168,8 +168,3 @@ Appodeal.addEventListener('onNonSkippableVideoFinished', () => console.log("Non 
 Appodeal.addEventListener('onNonSkippableVideoLoaded', () => console.log("Non Skippable video loaded"));
 Appodeal.addEventListener('onNonSkippableVideoShown', () => console.log("Non Skippable video shown"));
 ```
-
-## Changelog
-
-2.1.4 
-+ release

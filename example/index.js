@@ -14,17 +14,17 @@ import {
 export default class AppodealReactDevelop extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       autocache: false,
       adType: 0,
     };
-  
-  this.autocacheChanged = this.autocacheChanged.bind(this);
+
+    this.autocacheChanged = this.autocacheChanged.bind(this);
   }
 
   getCurrentAdType() {
-    switch(this.state.adType){
+    switch (this.state.adType) {
       case 0:
         return Appodeal.NONE;
         break;
@@ -48,7 +48,7 @@ export default class AppodealReactDevelop extends Component {
         break;
     }
   }
-  
+
   initializeClicked() {
     //Interstitial callbacks
     Appodeal.addEventListener('onInterstitialLoaded', (event) => console.log("Interstitial loaded. Precache: ", event.isPrecache));
@@ -56,33 +56,37 @@ export default class AppodealReactDevelop extends Component {
     Appodeal.addEventListener('onInterstitialClosed', () => console.log("Interstitial closed"));
     Appodeal.addEventListener('onInterstitialFailedToLoad', () => console.log("Interstitial failed to load"));
     Appodeal.addEventListener('onInterstitialShown', () => console.log("Interstitial shown"));
-    
+
     //Banner callbacks
     Appodeal.addEventListener('onBannerClicked', () => console.log("Banner clicked"));
     Appodeal.addEventListener('onBannerFailedToLoad', () => console.log("Banner failed to load"));
     Appodeal.addEventListener('onBannerLoaded', (event) => console.log("Banner loaded. Height: ", event.height + ", precache: " + event.isPrecache));
     Appodeal.addEventListener('onBannerShown', () => console.log("Banner shown"));
-    
+
     //Rewarded video callbacks
     Appodeal.addEventListener('onRewardedVideoClosed', (event) => console.log("Rewarded video closed: ", event.isFinished));
     Appodeal.addEventListener('onRewardedVideoFailedToLoad', () => console.log("Rewarded video failed to load"));
     Appodeal.addEventListener('onRewardedVideoFinished', (event) => console.log("Rewarded video finished. Amount: ", event.amount + ", currency" + event.currency));
     Appodeal.addEventListener('onRewardedVideoLoaded', () => console.log("Rewarded video loaded"));
     Appodeal.addEventListener('onRewardedVideoShown', () => console.log("Rewarded video shown"));
-    
+
     //Set user settings
     Appodeal.setAge(42);
     Appodeal.setGender(Appodeal.Gender.male);
     Appodeal.setUserId("your_custom_user_id");
-    
+
     Appodeal.setLogLevel(Appodeal.LogLevel.verbose);
     Appodeal.setSmartBanners(false);
     Appodeal.setBannerAnimation(false);
     Appodeal.setTabletBanners(false);
-    
+
     Appodeal.setAutoCache(this.getCurrentAdType(), this.state.autocache);
-    Appodeal.initialize("4b46ef930cd37cf11da84ae4d41019abb7234d5bbce3f000", this.getCurrentAdType());
-    
+    Appodeal.initialize(
+      Platform.select({
+        ios: "4b46ef930cd37cf11da84ae4d41019abb7234d5bbce3f000",
+        android: "fee50c333ff3825fd6ad6d38cff78154de3025546d47a84f",
+      }), this.getCurrentAdType(), true);
+
     //Custom rules for segments
     Appodeal.setCustomStringRule("custom_string_rule", "value");
     Appodeal.setCustomBooleanRule("special_user", true);
@@ -93,11 +97,11 @@ export default class AppodealReactDevelop extends Component {
     Appodeal.isLoaded(this.getCurrentAdType(), (isLoaded) => alert(isLoaded));
   }
   autocacheChanged() {
-  this.setState({
-            autocache: !this.state.autocache
-        });
+    this.setState({
+      autocache: !this.state.autocache
+    });
   }
-  adTypeChanged(newAdType){
+  adTypeChanged(newAdType) {
     this.setState({
       adType: newAdType
     });
@@ -106,7 +110,7 @@ export default class AppodealReactDevelop extends Component {
     let index = 0;
     const data = [
       { key: index++, section: true, label: 'Ad Types' },
-      { key: index++, label: 'Interstitial'},
+      { key: index++, label: 'Interstitial' },
       { key: index++, label: 'Banner' },
       { key: index++, label: 'Banner top' },
       { key: index++, label: 'Banner bottom' },
@@ -114,14 +118,14 @@ export default class AppodealReactDevelop extends Component {
     ];
     return (
       <View style={styles.container}>
-        
+
         <ModalPicker
-          style={{width: 200}}
+          style={{ width: 200 }}
           data={data}
           initValue="AdType"
-          onChange={(option)=>{ this.adTypeChanged(option.key) }} />
-      
-        <View style={{width: 200}}>
+          onChange={(option) => { this.adTypeChanged(option.key) }} />
+
+        <View style={{ width: 200 }}>
           <CheckboxField
             label={"Autocache"}
             checked={this.state.autocache}
@@ -134,42 +138,42 @@ export default class AppodealReactDevelop extends Component {
             <Text style={{ color: "#fff" }}> Y </Text>
           </CheckboxField>
         </View>
-      
+
         <Button
           style={styles.button}
           styleDisabled={styles.disabledButton}
           onPress={() => this.initializeClicked()}>
-            Initialize
+          Initialize
         </Button>
-      
+
         <Button
           style={styles.button}
           styleDisabled={styles.disabledButton}
           onPress={() => Appodeal.cache(this.getCurrentAdType())}>
-            Cache
+          Cache
         </Button>
-      
+
         <Button
           style={styles.button}
           styleDisabled={styles.disabledButton}
           onPress={() => this.isLoadedClicked()}>
-            Is loaded
+          Is loaded
         </Button>
-      
+
         <Button
           style={styles.button}
           styleDisabled={styles.disabledButton}
-          onPress={() => Appodeal.show(this.getCurrentAdType(), "initial_screen", (result) => console.log(result)) }>
-            Show
+          onPress={() => Appodeal.show(this.getCurrentAdType(), "initial_screen", (result) => console.log(result))}>
+          Show
         </Button>
-      
+
         <Button
           style={styles.button}
           styleDisabled={styles.disabledButton}
           onPress={() => Appodeal.hide(this.getCurrentAdType())}>
-            Hide
+          Hide
         </Button>
-    
+
       </View>
     );
   }
@@ -183,27 +187,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#ef3326',
   },
   button: {
-  marginTop: 8,
-  backgroundColor: "#fff",
+    marginTop: 8,
+    backgroundColor: "#fff",
     borderRadius: 5,
-  padding: 10,
-  alignItems: 'center',
-  color: '#ef3326',
-  width: 200
+    padding: 10,
+    alignItems: 'center',
+    color: '#ef3326',
+    width: 200
   },
   disabledButton: {
-  backgroundColor: "#aaa",
-  color: '#000',
+    backgroundColor: "#aaa",
+    color: '#000',
   },
   checkboxStyle: {
-      width: 26,
-      height: 26,
-      borderWidth: 2,
-      borderColor: '#ddd',
-      borderRadius: 5
+    width: 26,
+    height: 26,
+    borderWidth: 2,
+    borderColor: '#ddd',
+    borderRadius: 5
   },
   labelStyle: {
-      flex: 1,
+    flex: 1,
     color: "#fff"
   },
 });
