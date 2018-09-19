@@ -436,7 +436,7 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
 }
 
 #pragma mark - Interstitial events
-- (void)interstitialDidLoadAdisPrecache:(BOOL)precache {
+- (void)interstitialDidLoadAdIsPrecache:(BOOL)precache {
     [self sendEventWithName:kEventInterstitialLoaded body:@{@"isPrecache":[NSNumber numberWithBool:precache]}];
 }
 
