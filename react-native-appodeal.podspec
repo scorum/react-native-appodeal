@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => pkg["repository"]["url"] }
   s.source_files = 'ios/**/*.{h,m}'
   s.platform     = :ios, "8.0"
-  s.dependency 'Appodeal', '2.4.5.2-Beta'
+  s.dependency 'Appodeal', '2.4.7.2-Beta'
   s.dependency 'React'
 end
