@@ -139,13 +139,20 @@ RCT_EXPORT_METHOD(showToast:(NSString *)message) {
 
 RCT_EXPORT_METHOD(show:(int)showType placement:(NSString*)placement result:(RCTResponseSenderBlock)callback) {
     dispatch_async(dispatch_get_main_queue(), ^{
+        UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+        UIViewController *rootViewController = [keyWindow rootViewController];
+        
+        while ([rootViewController presentedViewController] != nil) {
+            rootViewController = [rootViewController presentedViewController];
+        }
+
         if ([placement  isEqual: @""]) {
-            if([Appodeal showAd:nativeShowStyleForType(showType) rootViewController:[[UIApplication sharedApplication] keyWindow].rootViewController])
+            if([Appodeal showAd:nativeShowStyleForType(showType) rootViewController:rootViewController])
                 callback(@[@YES]);
             else
                 callback(@[@NO]);
         } else {
-            if([Appodeal showAd:nativeShowStyleForType(showType) forPlacement:placement rootViewController:[[UIApplication sharedApplication] keyWindow].rootViewController])
+            if([Appodeal showAd:nativeShowStyleForType(showType) forPlacement:placement rootViewController:rootViewController])
                 callback(@[@YES]);
             else
                 callback(@[@NO]);
