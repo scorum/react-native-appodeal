@@ -20,7 +20,7 @@ android {
 }
 
 repositories {
-    jcenter() 
+    jcenter()
     mavenCentral()
     flatDir {
         dirs 'libs'
@@ -28,22 +28,25 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     compile 'com.facebook.react:react-native:+'
 
+    compile "com.google.android.gms:play-services-ads:+"
+    compile "com.google.android.gms:play-services-location:+"
+
     implementation 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
-    implementation name: 'adcolony-3.3.4', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-alphab', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-common', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-interstitial', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-interstitialvideo', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-mvdownloads', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-mvjscommon', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-mvnative', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-nativeex', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-playercommon', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-reward', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-videocommon', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-videofeeds', ext: 'aar'
-    implementation name: 'mobvista-8.11.0-videojs', ext: 'aar'
+    implementation files('libs/adcolony-3.3.4.aar')
+    implementation files('libs/mobvista-8.11.0-alphab.aar')
+    implementation files('libs/mobvista-8.11.0-common.aar')
+    implementation files('libs/mobvista-8.11.0-interstitial.aar')
+    implementation files('libs/mobvista-8.11.0-interstitialvideo.aar')
+    implementation files('libs/mobvista-8.11.0-mvdownloads.aar')
+    implementation files('libs/mobvista-8.11.0-mvjscommon.aar')
+    implementation files('libs/mobvista-8.11.0-mvnative.aar')
+    implementation files('libs/mobvista-8.11.0-nativeex.aar')
+    implementation files('libs/mobvista-8.11.0-playercommon.aar')
+    implementation files('libs/mobvista-8.11.0-reward.aar')
+    implementation files('libs/mobvista-8.11.0-videocommon.aar')
+    implementation files('libs/mobvista-8.11.0-videofeeds.aar')
+    implementation files('libs/mobvista-8.11.0-videojs.aar')
 }
