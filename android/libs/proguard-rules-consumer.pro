@@ -15,6 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
 # AdMediator
 -keep class com.admediator.** { *; }
 
@@ -75,6 +76,8 @@
 -keep class com.yandex.mobile.ads.** { *; }
 -dontwarn com.yandex.mobile.ads.**
 -keepattributes *Annotation*
+-keep class com.android.installreferrer.api.* { *; }
+-dontwarn com.android.installreferrer.api.*
 
 # StartApp
 -keep class com.startapp.** { *;}
@@ -123,11 +126,11 @@
 # Mobvista
 -keepattributes Signature
 -keepattributes *Annotation*
--keep class com.mobvista.** {*; }
--keep interface com.mobvista.** {*; }
+-keep class com.mintegral.** {*; }
+-keep interface com.mintegral.** {*; }
 -keep class android.support.v4.** { *; }
--dontwarn com.mobvista.**
--keep class **.R$* { public static final int mobvista*; }
+-dontwarn com.mintegral.**
+-keep class **.R$* { public static final int mintegral*; }
 -keep class com.alphab.** {*; }
 -keep interface com.alphab.** {*; }
 
@@ -136,6 +139,7 @@
 
 # Tapjoy
 -keep class com.tapjoy.** { *; }
+-keep class com.moat.** { *; }
 -dontwarn com.tapjoy.**
 
 # IronSource
@@ -169,6 +173,9 @@
 -keep class com.moat.** {*;}
 -dontwarn com.moat.**
 -keep class com.integralads.avid.library.* {*;}
+
+# Ogury
+-dontwarn io.presage.**
 
 # Google
 -keep class com.google.android.gms.common.GooglePlayServicesUtil {*;}
