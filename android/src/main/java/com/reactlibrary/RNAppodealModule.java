@@ -50,7 +50,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	@ReactMethod
 	public void initialize(String appKey, int adTypes, boolean hasConsent) {
-		Appodeal.setFramework("react-native", "2.5.0");
+		Appodeal.setFramework("react-native", "2.5.1");
 		Appodeal.initialize(getCurrentActivity(), appKey, adTypes, hasConsent);
 	}
 
