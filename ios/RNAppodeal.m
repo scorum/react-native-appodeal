@@ -485,7 +485,7 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
 }
 
 #pragma mark - Rewarded video events
-- (void)rewardedVideoDidLoadAd {
+- (void)rewardedVideoDidLoadAdIsPrecache:(BOOL)isPrecache {
     [self sendEventWithName:kEventRewardedVideoLoaded body:nil];
 }
 
@@ -497,7 +497,7 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
     [self sendEventWithName:kEventRewardedVideoShown body:nil];
 }
 
-- (void)rewardedVideoWillDismiss {
+- (void)rewardedVideoWillDismissAndWasFullyWatched:(BOOL)wasFullyWatched {
     [self sendEventWithName:kEventRewardedVideoClosed body:@{}];
 }
 
