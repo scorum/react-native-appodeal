@@ -118,7 +118,6 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType hasConsent:(BOOL)consent) {
     dispatch_async(dispatch_get_main_queue(), ^{
         customRules = [[NSMutableDictionary alloc] init];
-        [Appodeal setFramework:APDFrameworkReactNative];
         [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType) hasConsent:consent];
         
         [Appodeal setRewardedVideoDelegate:self];
@@ -313,21 +312,6 @@ RCT_EXPORT_METHOD(isAutocacheEnabled:(int)types callback:(RCTResponseSenderBlock
     });
 }
 
-RCT_EXPORT_METHOD(isInitialized:(RCTResponseSenderBlock)callback) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if([Appodeal isInitalized])
-            callback(@[@YES]);
-        else
-            callback(@[@NO]);
-    });
-}
-
-RCT_EXPORT_METHOD(disableUserData:(NSString *)network) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [Appodeal disableUserData:network];
-    });
-}
-
 #pragma mark Placement features
 
 RCT_EXPORT_METHOD(getRewardParameters:(NSString *) placementName result:(RCTResponseSenderBlock)callback) {
@@ -345,7 +329,7 @@ RCT_EXPORT_METHOD(getRewardParameters:(NSString *) placementName result:(RCTResp
 
 RCT_EXPORT_METHOD(canShow:(int)showType placement:(NSString *) placementName result:(RCTResponseSenderBlock)callback) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if([Appodeal canShowAd: nativeShowStyleForType(showType) forPlacement: placementName])
+        if([Appodeal canShow: nativeShowStyleForType(showType) forPlacement: placementName])
             callback(@[@YES]);
         else
             callback(@[@NO]);
