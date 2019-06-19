@@ -119,7 +119,7 @@
 		<!-- End Startapp -->
 
 		<!-- Yandex-metrica -->
-		<!-- <service
+		<service
 			android:name="com.yandex.metrica.MetricaService" android:enabled="true"
 			android:exported="true" android:process=":Metrica" tools:ignore="ExportedService" >
 			<intent-filter>
@@ -152,7 +152,7 @@
 			<intent-filter>
 				<action android:name="com.android.vending.INSTALL_REFERRER" />
 			</intent-filter>
-		</receiver> -->
+		</receiver>
 		<!-- End Yandex-metrica -->
 
 		<!-- Yandex-mobileads -->
