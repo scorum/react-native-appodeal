@@ -43,6 +43,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS_VERSION"
     implementation "com.google.android.gms:play-services-location:$PLAY_SERVICES_LOCATION_VERSION"
 
+    implementation 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
+
     implementation files ('libs/aar/adcolony-3.3.5.aar')
     implementation files ('libs/aar/mobvista-9.0.0-alphab.aar')
     implementation files ('libs/aar/mobvista-9.0.0-common.aar')
