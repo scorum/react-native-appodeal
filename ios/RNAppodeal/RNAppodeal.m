@@ -13,11 +13,11 @@ const int BANNER_TOP          = 16;
 const int REWARDED_VIDEO      = 128;
 const int NON_SKIPPABLE_VIDEO = 256;
 
-NSMutableDictionary *customRules;
-BOOL isRewardedFinished;
-BOOL isNonSkippableFinished;
-BOOL isBannerPrecache;
-BOOL isInterstitialPrecache;
+// NSMutableDictionary *customRules;
+// BOOL isRewardedFinished;
+// BOOL isNonSkippableFinished;
+// BOOL isBannerPrecache;
+// BOOL isInterstitialPrecache;
 
 static NSString *const kEventBannerLoaded = @"onBannerLoaded";
 static NSString *const kEventBannerFailedToLoad = @"onBannerFailedToLoad";
@@ -115,16 +115,17 @@ RCT_EXPORT_MODULE();
 
 #pragma mark exported methods
 
-RCT_EXPORT_METHOD(initialize:(NSString *)appKey types:(int)adType) {
+RCT_EXPORT_METHOD(initialize:(NSString *)apiKey types:(int)adType) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        customRules = [[NSMutableDictionary alloc] init];
-        [Appodeal setFramework:APDFrameworkReactNative];
-        [Appodeal initializeWithApiKey:appKey types:nativeAdTypesForType(adType)];
-        
+        // customRules = [[NSMutableDictionary alloc] init];
+        [Appodeal setFramework:APDFrameworkNative version:@"5.1"];
+        [Appodeal initializeWithApiKey:apiKey types:nativeAdTypesForType(adType)];
+
+        [Appodeal setInterstitialDelegate:self];
+        [Appodeal setBannerDelegate:self];
         [Appodeal setRewardedVideoDelegate:self];
         [Appodeal setNonSkippableVideoDelegate:self];
-        [Appodeal setBannerDelegate:self];
-        [Appodeal setInterstitialDelegate:self];
+        [Appodeal setNativeAdDelegate:self];
     });
 }
 
@@ -294,20 +295,20 @@ RCT_EXPORT_METHOD(isAutocacheEnabled:(int)types callback:(RCTResponseSenderBlock
     });
 }
 
-RCT_EXPORT_METHOD(isInitialized:(RCTResponseSenderBlock)callback) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if([Appodeal isInitalized])
-            callback(@[@YES]);
-        else
-            callback(@[@NO]);
-    });
-}
+// RCT_EXPORT_METHOD(isInitialized:(RCTResponseSenderBlock)callback) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if([Appodeal isInitalizedForAdType])
+//             callback(@[@YES]);
+//         else
+//             callback(@[@NO]);
+//     });
+// }
 
-RCT_EXPORT_METHOD(disableUserData:(NSString *)network) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [Appodeal disableUserData:network];
-    });
-}
+// RCT_EXPORT_METHOD(disableUserData:(NSString *)network) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         [Appodeal disableUserData:network];
+//     });
+// }
 
 #pragma mark Placement features
 
@@ -324,54 +325,54 @@ RCT_EXPORT_METHOD(getRewardParameters:(NSString *) placementName result:(RCTResp
     });
 }
 
-RCT_EXPORT_METHOD(canShow:(int)showType placement:(NSString *) placementName result:(RCTResponseSenderBlock)callback) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if([Appodeal canShowAd: nativeShowStyleForType(showType) forPlacement: placementName])
-            callback(@[@YES]);
-        else
-            callback(@[@NO]);
-    });
-}
+// RCT_EXPORT_METHOD(canShow:(int)showType placement:(NSString *) placementName result:(RCTResponseSenderBlock)callback) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if([Appodeal canShowAd: nativeShowStyleForType(showType) forPlacement: placementName])
+//             callback(@[@YES]);
+//         else
+//             callback(@[@NO]);
+//     });
+// }
 
-RCT_EXPORT_METHOD(setCustomDoubleRule:(NSString *)ruleName value:(double)ruleValue) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (customRules) {
-            NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithDouble:ruleValue]};
-            [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
-        }
-    });
-}
+// RCT_EXPORT_METHOD(setCustomDoubleRule:(NSString *)ruleName value:(double)ruleValue) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if (customRules) {
+//             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithDouble:ruleValue]};
+//             [customRules addEntriesFromDictionary:tempDictionary];
+//             [Appodeal setCustomRule:customRules];
+//         }
+//     });
+// }
 
-RCT_EXPORT_METHOD(setCustomIntegerRule:(NSString *)ruleName value:(int)ruleValue) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (customRules) {
-            NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithInteger:ruleValue]};
-            [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
-        }
-    });
-}
+// RCT_EXPORT_METHOD(setCustomIntegerRule:(NSString *)ruleName value:(int)ruleValue) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if (customRules) {
+//             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithInteger:ruleValue]};
+//             [customRules addEntriesFromDictionary:tempDictionary];
+//             [Appodeal setCustomRule:customRules];
+//         }
+//     });
+// }
 
-RCT_EXPORT_METHOD(setCustomStringRule:(NSString *)ruleName value:(NSString *)ruleValue) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (customRules) {
-            NSDictionary *tempDictionary = @{ruleName : ruleValue};
-            [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
-        }
-    });
-}
+// RCT_EXPORT_METHOD(setCustomStringRule:(NSString *)ruleName value:(NSString *)ruleValue) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if (customRules) {
+//             NSDictionary *tempDictionary = @{ruleName : ruleValue};
+//             [customRules addEntriesFromDictionary:tempDictionary];
+//             [Appodeal setCustomRule:customRules];
+//         }
+//     });
+// }
 
-RCT_EXPORT_METHOD(setCustomBooleanRule:(NSString *)ruleName value:(BOOL)ruleValue) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (customRules) {
-            NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithBool:ruleValue]};
-            [customRules addEntriesFromDictionary:tempDictionary];
-            [Appodeal setCustomRule:customRules];
-        }
-    });
-}
+// RCT_EXPORT_METHOD(setCustomBooleanRule:(NSString *)ruleName value:(BOOL)ruleValue) {
+//     dispatch_async(dispatch_get_main_queue(), ^{
+//         if (customRules) {
+//             NSDictionary *tempDictionary = @{ruleName : [NSNumber numberWithBool:ruleValue]};
+//             [customRules addEntriesFromDictionary:tempDictionary];
+//             [Appodeal setCustomRule:customRules];
+//         }
+//     });
+// }
 
 
 #pragma mark User Data

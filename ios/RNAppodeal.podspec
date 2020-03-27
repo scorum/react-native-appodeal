@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage     = package['homepage']
   s.license      = package['license']
   s.author       = package['author']
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios, "9.0"
   s.source       = { :git => package['repository']['url'], :tag => "master" }
   s.source_files  = "RNAppodeal/**/*.{h,m}"
   s.requires_arc = true

@@ -90,10 +90,10 @@ const removeAllListeners = () => {
   });
 };
 
-const canShow = Platform.select({
-  ios: (adTypes, placement, cb = () => {}) => RNAppodeal.canShow(adTypes, placement, cb),
-  android: (adType, placement, cb = () => {}) => RNAppodeal.canShow({adType , placement}, cb),
-});
+// const canShow = Platform.select({
+//   ios: (adTypes, placement, cb = () => {}) => RNAppodeal.canShow(adTypes, placement, cb),
+//   android: (adType, placement, cb = () => {}) => RNAppodeal.canShow({adType , placement}, cb),
+// });
 
 module.exports = {
   ...RNAppodeal,
@@ -131,11 +131,11 @@ module.exports = {
   muteVideosIfCallsMuted: (value) => RNAppodeal.muteVideosIfCallsMuted(appKey, adTypes),
   showTestScreen: () => RNAppodeal.showTestScreen(),
   getVersion: (cb = () => {}) => RNAppodeal.getVersion(cb),
-  canShow,
-  setCustomStringRule: (name, value) => RNAppodeal.setCustomStringRule(name, value),
-  setCustomBooleanRule: (name, value) => RNAppodeal.setCustomBooleanRule(name, value),
-  setCustomIntegerRule: (name, value) => RNAppodeal.setCustomIntegerRule(name, value),
-  setCustomDoubleRule: (name, value) => RNAppodeal.setCustomDoubleRule(name, value),
+  // canShow,
+  // setCustomStringRule: (name, value) => RNAppodeal.setCustomStringRule(name, value),
+  // setCustomBooleanRule: (name, value) => RNAppodeal.setCustomBooleanRule(name, value),
+  // setCustomIntegerRule: (name, value) => RNAppodeal.setCustomIntegerRule(name, value),
+  // setCustomDoubleRule: (name, value) => RNAppodeal.setCustomDoubleRule(name, value),
   trackInAppPurchase: (amount, currency) => RNAppodeal.trackInAppPurchase(amount, currency),
   getRewardParameters: (placement, cb = () => {}) => RNAppodeal.getRewardParameters(placement, cb),
   setAge: (age) => RNAppodeal.setAge(age),
