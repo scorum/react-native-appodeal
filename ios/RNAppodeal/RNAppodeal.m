@@ -409,7 +409,7 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
 #pragma mark Events
 #pragma mark - banner events
 - (void)bannerDidShow {
-    //[self sendEventWithName:@"onBannerShown" body:nil];
+    [self sendEventWithName:@"onBannerShown" body:nil];
 }
 
 - (void)bannerDidLoadAdIsPrecache:(BOOL)precache {
