@@ -50,7 +50,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	@ReactMethod
 	public void initialize(String appKey, int adTypes) {
-		Appodeal.setFramework("react-native", "2.1.4");
+		Appodeal.setFramework("react-native", "2.5.1");
 		Appodeal.initialize(getCurrentActivity(), appKey, adTypes);
 	}
 
@@ -201,47 +201,47 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 		}
 	}
 
-	@ReactMethod
-	public void setCustomStringRule(String name, String value){
-		Appodeal.setCustomRule(name, value);
-	}
+//	@ReactMethod
+//	public void setCustomStringRule(String name, String value){
+//		Appodeal.setCustomRule(name, value);
+//	}
 
-	@ReactMethod
-	public void setCustomBooleanRule(String name, boolean value){
-		Appodeal.setCustomRule(name, value);
-	}
+//	@ReactMethod
+//	public void setCustomBooleanRule(String name, boolean value){
+//		Appodeal.setCustomRule(name, value);
+//	}
 
-	@ReactMethod
-	public void setCustomIntegerRule(String name, int value){
-		Appodeal.setCustomRule(name, value);
-	}
+//	@ReactMethod
+//	public void setCustomIntegerRule(String name, int value){
+//		Appodeal.setCustomRule(name, value);
+//	}
 
-	@ReactMethod
-	public void setCustomDoubleRule(String name, double value){
-		Appodeal.setCustomRule(name, value);
-	}
+//	 @ReactMethod
+//	 public void setCustomDoubleRule(String name, double value){
+//	 	Appodeal.setCustomRule(name, value);
+//	 }
 
 	@ReactMethod
 	public void trackInAppPurchase(double amount, String currency){
 		Appodeal.trackInAppPurchase(getCurrentActivity(), amount, currency);
 	}
 
-	@ReactMethod
-	public void getRewardParameters(ReadableMap args, Callback callback){
-		String placement = args.hasKey("placement") ? args.getString("placement") : null;
-		WritableMap params = Arguments.createMap();
-		if (placement == null) {
-			params.putInt("amount", Appodeal.getRewardParameters().first);
-			params.putString("currency", Appodeal.getRewardParameters().second);
-		} else {
-			params.putInt("amount", Appodeal.getRewardParameters(placement).first);
-			params.putString("currency", Appodeal.getRewardParameters(placement).second);
-		}
-
-		if (callback != null) {
-			callback.invoke(params);
-		}
-	}
+//	@ReactMethod
+//	public void getRewardParameters(ReadableMap args, Callback callback){
+//		String placement = args.hasKey("placement") ? args.getString("placement") : null;
+//		WritableMap params = Arguments.createMap();
+//		if (placement == null) {
+//			params.putInt("amount", Appodeal.getRewardParameters().first);
+//			params.putString("currency", Appodeal.getRewardParameters().second);
+//		} else {
+//			params.putInt("amount", Appodeal.getRewardParameters(placement).first);
+//			params.putString("currency", Appodeal.getRewardParameters(placement).second);
+//		}
+//
+//		if (callback != null) {
+//			callback.invoke(params);
+//		}
+//	}
 
 	private UserSettings getUserSettings(){
 		if(settings == null) {
@@ -302,6 +302,16 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
+	public void onInterstitialShowFailed() {
+		// sendEventToJS("onInterstitialShowFailed", null);
+	}
+
+	@Override
+	public void onInterstitialExpired() {
+		// sendEventToJS("onInterstitialExpired", null);
+	}
+
+	@Override
 	public void onBannerClicked() {
 		sendEventToJS("onBannerClicked", null);
 	}
@@ -318,6 +328,17 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 		params.putBoolean("isPrecache", isPrecache);
 		sendEventToJS("onBannerLoaded", params);
 	}
+
+	@Override
+	public void onBannerShowFailed() {
+		// sendEventToJS("onBannerShowFailed", null);
+	}
+
+	@Override
+	public void onBannerExpired() {
+		// sendEventToJS("onBannerExpired", null);
+	}
+
 
 	@Override
 	public void onBannerShown() {
@@ -342,13 +363,25 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
-	public void onNonSkippableVideoLoaded() {
-		sendEventToJS("onNonSkippableVideoLoaded", null);
+	public void onNonSkippableVideoExpired() {
+		// sendEventToJS("onNonSkippableVideoExpired", null);
+	}
+
+	@Override
+	public void onNonSkippableVideoLoaded(boolean isLoaded) {
+		WritableMap params = Arguments.createMap();
+		params.putBoolean("isLoaded", isLoaded);
+		// sendEventToJS("onNonSkippableVideoLoaded", params);
 	}
 
 	@Override
 	public void onNonSkippableVideoShown() {
 		sendEventToJS("onNonSkippableVideoShown", null);
+	}
+
+	@Override
+	public void onNonSkippableVideoShowFailed() {
+		// sendEventToJS("onNonSkippableVideoShowFailed", null);
 	}
 
 	@Override
@@ -364,16 +397,33 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 	}
 
 	@Override
-	public void onRewardedVideoFinished(int amount, String currency) {
+	public void onRewardedVideoShowFailed() {
+		// sendEventToJS("onRewardedVideoShowFailed", null);
+	}
+
+	@Override
+	public void onRewardedVideoExpired() {
+		// sendEventToJS("onRewardedVideoExpired", null);
+	}
+
+	@Override
+	public void onRewardedVideoClicked() {
+		// sendEventToJS("onRewardedVideoClicked", null);
+	}
+
+	@Override
+	public void onRewardedVideoFinished(double amount, String currency) {
 		WritableMap params = Arguments.createMap();
-		params.putInt("amount", amount);
+		params.putDouble("amount", amount);
 		params.putString("currency", currency);
 		sendEventToJS("onRewardedVideoFinished", params);
 	}
 
 	@Override
-	public void onRewardedVideoLoaded() {
-		sendEventToJS("onRewardedVideoLoaded", null);
+	public void onRewardedVideoLoaded(boolean isLoaded) {
+		WritableMap params = Arguments.createMap();
+		params.putBoolean("isLoaded", isLoaded);
+		// sendEventToJS("onRewardedVideoLoaded", params);
 	}
 
 	@Override

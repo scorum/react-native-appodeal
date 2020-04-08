@@ -5,7 +5,7 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -17,20 +17,21 @@ android {
     dexOptions {
         javaMaxHeapSize "2g"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
     jcenter() 
     mavenCentral()
     maven {
-      url  "https://adcolony.bintray.com/AdColony"      
+        url "https://artifactory.appodeal.com/appodeal"
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"
-    implementation 'com.adcolony:sdk:3.3.9'
-    implementation 'com.google.android.gms:play-services-ads:+'
-    implementation "com.google.android.gms:play-services-location:+"
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.appodeal.ads:sdk:2.6.3.+'
 }
