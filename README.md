@@ -68,7 +68,7 @@ maven {
   android {
     ...
     dexOptions {
-      javaMaxHeapSize "2g"
+      javaMaxHeapSize "4g"
     }
   }
   ```

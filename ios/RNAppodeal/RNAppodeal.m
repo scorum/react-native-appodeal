@@ -118,14 +118,16 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(initialize:(NSString *)apiKey types:(int)adType) {
     dispatch_async(dispatch_get_main_queue(), ^{
         // customRules = [[NSMutableDictionary alloc] init];
-        [Appodeal setFramework:APDFrameworkNative version:@"5.1"];
-        [Appodeal initializeWithApiKey:apiKey types:nativeAdTypesForType(adType)];
+        // [Appodeal setFramework:APDFrameworkNative version:@"5.1"];
+        BOOL consent = YES;
+        [Appodeal setAutocache: NO types: AppodealAdTypeInterstitial];
+        [Appodeal initializeWithApiKey:apiKey types:nativeAdTypesForType(adType) hasConsent:consent];
 
         [Appodeal setInterstitialDelegate:self];
         [Appodeal setBannerDelegate:self];
         [Appodeal setRewardedVideoDelegate:self];
         [Appodeal setNonSkippableVideoDelegate:self];
-        [Appodeal setNativeAdDelegate:self];
+        // [Appodeal setNativeAdDelegate:self];
     });
 }
 
@@ -479,15 +481,11 @@ RCT_EXPORT_METHOD(setGender:(NSString *)AppodealUserGender) {
     [self sendEventWithName:kEventRewardedVideoShown body:nil];
 }
 
-- (void)rewardedVideoWillDismiss {
-    [self sendEventWithName:kEventRewardedVideoClosed body:nil];
+- (void)rewardedVideoWillDismissAndWasFullyWatched:(BOOL)wasFullyWatched {
+    [self sendEventWithName:kEventRewardedVideoClosed body:@{@"fullyWatched": @(wasFullyWatched)}];
 }
 
-- (void)rewardedVideoDidFinish:(NSUInteger)rewardAmount name:(NSString *)rewardName {
-    if (rewardName == nil) {
-        [self sendEventWithName:kEventRewardedVideoFinished body:@{@"amount":[NSNumber numberWithInteger:0],@"name":@"nil"}];
-    } else {
-        [self sendEventWithName:kEventRewardedVideoFinished body:@{@"amount":[NSNumber numberWithInteger:rewardAmount],@"name":rewardName}];
-    }
+- (void)rewardedVideoDidFinish:(float)rewardAmount name:(NSString *)rewardName {
+    [self sendEventWithName:kEventRewardedVideoFinished body:@{@"amount":@(rewardAmount), @"name": rewardName ?: @""}];
 }
 @end
