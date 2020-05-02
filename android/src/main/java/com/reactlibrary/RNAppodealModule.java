@@ -27,16 +27,19 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	private final ReactApplicationContext reactContext;
 
-	private UserSettings settings;
+	// private UserSettings settings;
 
 	public RNAppodealModule(ReactApplicationContext reactContext) {
 		super(reactContext);
 		this.reactContext = reactContext;
+		Appodeal.setFramework("react-native", getPluginVersion());
 		Appodeal.setInterstitialCallbacks(this);
 		Appodeal.setBannerCallbacks(this);
-		Appodeal.setNonSkippableVideoCallbacks(this);
+    	Appodeal.setNonSkippableVideoCallbacks(this);
 		Appodeal.setRewardedVideoCallbacks(this);
 	}
+
+	private String getPluginVersion() { return Appodeal.getVersion() + ".1"; }
 
 	@Override
 	public String getName() {
@@ -45,14 +48,14 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	@ReactMethod
 	public void showToast(String message) {
-		Toast.makeText(getReactApplicationContext(), message, 0).show();
+		Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
 
-	@ReactMethod
-	public void initialize(String appKey, int adTypes) {
-		Appodeal.setFramework("react-native", "2.5.1");
-		Appodeal.initialize(getCurrentActivity(), appKey, adTypes);
-	}
+    @ReactMethod
+    public void initialize(String appKey, int adTypes) {
+		boolean consent = true;
+    	Appodeal.initialize(getCurrentActivity(), appKey, adTypes, consent);
+    }
 
 	@ReactMethod
 	public void show(int adTypes, String placement, Callback callback){
@@ -69,7 +72,7 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 
 	@ReactMethod
 	public void isLoaded(int adTypes, Callback callback){
-		boolean result =  Appodeal.isLoaded(adTypes);
+		boolean result = Appodeal.isLoaded(adTypes);
 		if (callback != null) {
 			callback.invoke(result);
 		}
@@ -90,13 +93,13 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 		Appodeal.setAutoCache(adTypes, isEnabled);
 	}
 
-	@ReactMethod
-	public void isPrecache(int adType, Callback callback){
-		boolean result = Appodeal.isPrecache(adType);
-		if (callback != null) {
-			callback.invoke(result);
-		}
-	}
+    @ReactMethod
+    	public void isPrecache(int adType, Callback callback) {
+        boolean result = Appodeal.isPrecache(adType);
+        if (callback != null) {
+            callback.invoke(result);
+        }
+    }
 
 	@ReactMethod
 	public void setTabletBanners(boolean flag){
@@ -243,31 +246,31 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 //		}
 //	}
 
-	private UserSettings getUserSettings(){
-		if(settings == null) {
-			settings = Appodeal.getUserSettings(getCurrentActivity());
-		}
-		return settings;
+	// private UserSettings getUserSettings(){
+	// 	if(settings == null) {
+	// 		settings = Appodeal.getUserSettings(getCurrentActivity());
+	// 	}
+	// 	return settings;
+	// }
+
+	@ReactMethod
+	public void setAge(int age) {
+		Appodeal.setUserAge(age);
 	}
 
 	@ReactMethod
-	public void setAge(int age){
-		getUserSettings().setAge(age);
-	}
-
-	@ReactMethod
-	public void setUserId(String id){
-		getUserSettings().setUserId(id);
-	}
+	public void setUserId(String id) {
+    Appodeal.setUserId(id);
+  }
 
 	@ReactMethod
 	public void setGender(String gender){
 		if (gender.equals("male"))
-			getUserSettings().setGender(com.appodeal.ads.UserSettings.Gender.MALE);
+			Appodeal.setUserGender(com.appodeal.ads.UserSettings.Gender.MALE);
 		else if (gender.equals("female"))
-			getUserSettings().setGender(com.appodeal.ads.UserSettings.Gender.FEMALE);
+			Appodeal.setUserGender(com.appodeal.ads.UserSettings.Gender.FEMALE);
 		else if (gender.equals("other"))
-			getUserSettings().setGender(com.appodeal.ads.UserSettings.Gender.OTHER);
+			Appodeal.setUserGender(com.appodeal.ads.UserSettings.Gender.OTHER);
 	}
 
 	private void sendEventToJS(String eventName, WritableMap params){
@@ -384,52 +387,45 @@ public class RNAppodealModule extends ReactContextBaseJavaModule implements Inte
 		// sendEventToJS("onNonSkippableVideoShowFailed", null);
 	}
 
-	@Override
-	public void onRewardedVideoClosed(boolean isFinished) {
-		WritableMap params = Arguments.createMap();
-		params.putBoolean("isFinished", isFinished);
-		sendEventToJS("onRewardedVideoClosed", params);
-	}
 
-	@Override
-	public void onRewardedVideoFailedToLoad() {
-		sendEventToJS("onRewardedVideoFailedToLoad", null);
-	}
+  @Override
+  public void onRewardedVideoLoaded(boolean isPrecache) {
+      WritableMap params = Arguments.createMap();
+      params.putBoolean("isPrecache", isPrecache);
+      sendEventToJS("onRewardedVideoLoaded", params);
+  }
 
-	@Override
-	public void onRewardedVideoShowFailed() {
-		// sendEventToJS("onRewardedVideoShowFailed", null);
-	}
+  @Override
+  public void onRewardedVideoFailedToLoad() { sendEventToJS("onRewardedVideoFailedToLoad", null); }
 
-	@Override
-	public void onRewardedVideoExpired() {
-		// sendEventToJS("onRewardedVideoExpired", null);
-	}
+  @Override
+  public void onRewardedVideoShowFailed() { sendEventToJS("onRewardedVideoFailedToShow", null); }
 
-	@Override
-	public void onRewardedVideoClicked() {
-		// sendEventToJS("onRewardedVideoClicked", null);
-	}
+  @Override
+  public void onRewardedVideoShown() {
+      sendEventToJS("onRewardedVideoShown", null);
+  }
 
-	@Override
-	public void onRewardedVideoFinished(double amount, String currency) {
-		WritableMap params = Arguments.createMap();
-		params.putDouble("amount", amount);
-		params.putString("currency", currency);
-		sendEventToJS("onRewardedVideoFinished", params);
-	}
+  @Override
+  public void onRewardedVideoClosed(boolean isFinished) {
+      WritableMap params = Arguments.createMap();
+      params.putBoolean("isFinished", isFinished);
+      sendEventToJS("onRewardedVideoClosed", params);
+  }
 
-	@Override
-	public void onRewardedVideoLoaded(boolean isLoaded) {
-		WritableMap params = Arguments.createMap();
-		params.putBoolean("isLoaded", isLoaded);
-		// sendEventToJS("onRewardedVideoLoaded", params);
-	}
+  @Override
+  public void onRewardedVideoFinished(double amount, String currency) {
+      WritableMap params = Arguments.createMap();
+      params.putDouble("amount", amount);
+      params.putString("currency", currency);
+      sendEventToJS("onRewardedVideoFinished", params);
+  }
 
-	@Override
-	public void onRewardedVideoShown() {
-		sendEventToJS("onRewardedVideoShown", null);
-	}
+  @Override
+  public void onRewardedVideoExpired() { }
+
+  @Override
+  public void onRewardedVideoClicked() { }
 
 	@Override
 	public void accessCoarseLocationResponse(int response) {

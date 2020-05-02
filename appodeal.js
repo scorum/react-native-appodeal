@@ -30,17 +30,18 @@ const eventHandlers = {
   onBannerLoaded: 'onBannerLoaded',
   onBannerShown: 'onBannerShown',
 
-  onRewardedVideoClosed: 'onRewardedVideoClosed',
-  onRewardedVideoFailedToLoad: 'onRewardedVideoFailedToLoad',
-  onRewardedVideoFinished: 'onRewardedVideoFinished',
-  onRewardedVideoLoaded: 'onRewardedVideoLoaded',
-  onRewardedVideoShown: 'onRewardedVideoShown',
-
   onNonSkippableVideoClosed: 'onNonSkippableVideoClosed',
   onNonSkippableVideoFailedToLoad: 'onNonSkippableVideoFailedToLoad',
   onNonSkippableVideoFinished: 'onNonSkippableVideoFinished',
   onNonSkippableVideoLoaded: 'onNonSkippableVideoLoaded',
   onNonSkippableVideoShown: 'onNonSkippableVideoShown',
+
+  onRewardedVideoLoaded: 'onRewardedVideoLoaded',
+  onRewardedVideoFailedToLoad: 'onRewardedVideoFailedToLoad',
+  onRewardedVideoShown: 'onRewardedVideoShown',
+  onRewardedVideoFailedToShow: 'onRewardedVideoFailedToShow',
+  onRewardedVideoClosed: 'onRewardedVideoClosed',
+  onRewardedVideoFinished: 'onRewardedVideoFinished',
 };
 
 const LogLevel = {
